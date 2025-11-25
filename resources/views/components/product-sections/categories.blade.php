@@ -1,0 +1,9 @@
+<!-- Categories -->
+  <section id="categories" class="max-w-7xl mx-auto px-4 py-12">
+    <div class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+      <a class="card group rounded-xl overflow-hidden relative bg-gradient-to-br from-rose-100 to-rose-200 p-6" href="#"><h3 class="font-bold text-xl">Men Shoes</h3><p class="text-sm text-slate-600">Oxfords · Loafers</p><img class="absolute bottom-0 right-2 w-28 opacity-90 group-hover:translate-y-1 transition" src="https://images.unsplash.com/photo-1542060748-10c28b62716f?q=80&w=500&auto=format&fit=crop" alt="shoes" /></a>
+      <a class="card group rounded-xl overflow-hidden relative bg-gradient-to-br from-amber-100 to-amber-200 p-6" href="#"><h3 class="font-bold text-xl">Office Bags</h3><p class="text-sm text-slate-600">Totes · Messenger</p><img class="absolute bottom-0 right-2 w-28 opacity-90 group-hover:translate-y-1 transition" src="https://images.unsplash.com/photo-1520975916090-3105956dac38?q=80&w=500&auto=format&fit=crop" alt="bag" /></a>
+      <a class="card group rounded-xl overflow-hidden relative bg-gradient-to-br from-sky-100 to-sky-200 p-6" href="#"><h3 class="font-bold text-xl">Belts</h3><p class="text-sm text-slate-600">Formal · Casual</p><img class="absolute bottom-0 right-2 w-28 rotate-6 opacity-90 group-hover:translate-y-1 transition" src="https://images.unsplash.com/photo-1578898887932-2b2bbd903586?q=80&w=500&auto=format&fit=crop" alt="belt" /></a>
+      <a class="card group rounded-xl overflow-hidden relative bg-gradient-to-br from-emerald-100 to-emerald-200 p-6" href="#"><h3 class="font-bold text-xl">Wallets</h3><p class="text-sm text-slate-600">Minimal · RFID</p><img class="absolute bottom-0 right-2 w-28 opacity-90 group-hover:translate-y-1 transition" src="https://images.unsplash.com/photo-1591375275159-95f21d67f113?q=80&w=500&auto=format&fit=crop" alt="wallet" /></a>
+    </div>
+  </section>

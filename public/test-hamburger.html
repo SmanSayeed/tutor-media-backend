@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Hamburger</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body>
+    <div class="p-4">
+        <h1 class="text-2xl mb-4">Hamburger Menu Test</h1>
+        
+        <!-- Test button -->
+        <button id="test-btn" class="p-2 bg-blue-500 text-white rounded" onclick="testClick()">
+            Test Click
+        </button>
+        
+        <!-- Hamburger button (copied from your header) -->
+        <button id="nav-toggle" class="p-2 rounded-lg hover:bg-slate-100 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-all duration-200 ml-4 border border-gray-300" 
+                aria-label="Open Menu" onclick="triggerNavDrawer()">
+          <svg class="w-6 h-6 text-slate-700" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+          </svg>
+        </button>
+        
+        <div id="output" class="mt-4 p-4 bg-gray-100 rounded"></div>
+    </div>
+
+    <!-- Nav drawer test -->
+    <div id="nav-drawer-root">
+        <div id="nav-overlay" class="fixed inset-0 bg-black/40 opacity-0 invisible transition-opacity duration-200 z-40" onclick="closeNavDrawer()"></div>
+        <aside id="nav-drawer" class="fixed left-0 top-0 h-full w-80 max-w-[85vw] -translate-x-full bg-white z-50 shadow-xl transition-transform duration-300">
+            <div class="p-4">
+                <h2>Test Drawer</h2>
+                <button onclick="closeNavDrawer()" class="mt-2 px-4 py-2 bg-red-500 text-white rounded">Close</button>
+            </div>
+        </aside>
+    </div>
+
+    <script>
+        function testClick() {
+            document.getElementById('output').innerHTML += '<p>Test button clicked!</p>';
+        }
+        
+        function triggerNavDrawer() {
+            document.getElementById('output').innerHTML += '<p>Hamburger clicked!</p>';
+            console.log('Hamburger clicked - dispatching toggle-drawer event');
+            const event = new CustomEvent('toggle-drawer', { detail: { open: true } });
+            window.dispatchEvent(event);
+        }
+        
+        const navDrawer = document.getElementById('nav-drawer');
+        const navOverlay = document.getElementById('nav-overlay');
+        
+        function openNavDrawer(){
+            document.getElementById('output').innerHTML += '<p>openNavDrawer called!</p>';
+            if (navDrawer && navOverlay) {
+                document.getElementById('output').innerHTML += '<p>Elements found, opening drawer</p>';
+                navDrawer.style.transform = 'translateX(0)';
+                navOverlay.classList.remove('invisible');
+                requestAnimationFrame(() => navOverlay.classList.add('opacity-100'));
+            } else {
+                document.getElementById('output').innerHTML += '<p>Navigation elements not found</p>';
+            }
+        }
+        
+        function closeNavDrawer(){
+            if (navDrawer && navOverlay) {
+                navDrawer.style.transform = 'translateX(-100%)';
+                navOverlay.classList.remove('opacity-100');
+                navOverlay.addEventListener('transitionend', function handler(){
+                    navOverlay.classList.add('invisible');
+                    navOverlay.removeEventListener('transitionend', handler);
+                });
+            }
+        }
+        
+        window.addEventListener('toggle-drawer', (e) => {
+            document.getElementById('output').innerHTML += '<p>toggle-drawer event received!</p>';
+            if (e.detail && e.detail.open) {
+                openNavDrawer();
+            } else {
+                closeNavDrawer();
+            }
+        });
+    </script>
+</body>
+</html>

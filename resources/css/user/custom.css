@@ -1,0 +1,33 @@
+/* Custom CSS for UI/UX enhancements */
+
+/* Section spacing */
+.section-spacing {
+  @apply py-12 sm:py-16 lg:py-20;
+}
+
+/* Product card enhancements */
+.card {
+  @apply transition-all duration-300;
+}
+
+.card:hover {
+  @apply transform -translate-y-1 shadow-lg;
+}
+
+/* Cart icon animation */
+.cart-icon-animation {
+  @apply transition-transform duration-300;
+}
+
+.cart-icon-animation:hover {
+  @apply transform scale-110;
+}
+
+/* Add to cart button feedback */
+.add-to-cart-feedback {
+  @apply transition-all duration-300;
+}
+
+.add-to-cart-feedback:active {
+  @apply transform scale-95;
+}
