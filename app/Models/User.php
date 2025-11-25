@@ -4,12 +4,8 @@ namespace App\Models;
 
 use App\Notifications\ResetPassword;
 use Illuminate\Foundation\Auth\User as Authenticatable;
-use Illuminate\Auth\Passwords\CanResetPassword;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Notifications\Notifiable;
-use Illuminate\Database\Eloquent\Model;
-
-use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 
 class User extends Authenticatable
 {
@@ -63,29 +59,6 @@ class User extends Authenticatable
         ];
     }
 
-    /**
-     * Get the reviews for the user through customer.
-     */
-    public function reviews()
-    {
-        return $this->hasManyThrough(Review::class, Customer::class, 'user_id', 'customer_id');
-    }
-
-    /**
-     * Get the orders for the user.
-     */
-    public function orders()
-    {
-        return $this->hasMany(Order::class);
-    }
-
-    /**
-     * Get the cart items for the user.
-     */
-    public function cartItems()
-    {
-        return $this->hasMany(Cart::class);
-    }
 
     /**
      * Check if user account is active.
@@ -101,22 +74,6 @@ class User extends Authenticatable
     public function isAdmin(): bool
     {
         return $this->role === 'admin';
-    }
-
-    /**
-     * Check if user has vendor role.
-     */
-    public function isVendor(): bool
-    {
-        return $this->role === 'vendor';
-    }
-
-    /**
-     * Check if user has customer role.
-     */
-    public function isCustomer(): bool
-    {
-        return $this->role === 'customer';
     }
 
     /**

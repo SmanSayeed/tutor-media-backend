@@ -88,9 +88,7 @@
       </a>
       <ul class="sidebar-submenu">
         <li>
-          <a href="{{ route('admin.advance-payment.index') }}"
-            class="sidebar-submenu-item {{ request()->routeIs('admin.advance-payment*') ? 'active' : '' }}"> Advance
-            Payment </a>
+          <a href="#" class="sidebar-submenu-item">Advance Payment</a>
         </li>
       </ul>
     </li>

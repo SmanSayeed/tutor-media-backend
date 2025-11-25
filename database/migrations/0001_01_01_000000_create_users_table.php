@@ -19,19 +19,14 @@ return new class extends Migration
             $table->string('password');
             $table->string('phone')->nullable();
             $table->string('avatar')->nullable();
-            $table->enum('role', ['admin', 'customer', 'vendor'])->default('customer');
-            $table->boolean('is_active')->default(true);
-            $table->string('timezone')->default('UTC');
-            $table->string('last_login_ip')->nullable();
-            $table->integer('login_attempts')->default(0);
-            $table->timestamp('locked_until')->nullable();
+            $table->enum('role', ['admin', 'guardian', 'tutor'])->default('guardian');
             $table->rememberToken();
             $table->timestamps();
-
+            $table->softDeletes();
+            
             $table->index(['email']);
             $table->index(['phone']);
             $table->index(['role']);
-            $table->index(['is_active']);
             $table->index(['created_at']);
         });
 

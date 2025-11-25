@@ -73,7 +73,7 @@
             <i class="h-4" data-feather="upload"></i>
             <span class="hidden sm:inline-block">Export</span>
           </button>
-        </div>      
+        </div>
       </div>
       <!-- Customer Action Ends -->
     </div>
@@ -89,76 +89,76 @@
             </th>
             <th class="w-[45%] uppercase">Customer</th>
             <th class="w-[15%] uppercase">Phone</th>
-            <th class="w-[15%] uppercase">Last Ordered at</th>
             <th class="w-[15%] uppercase">Status</th>
             <th class="w-[5%] !text-right uppercase">Actions</th>
           </tr>
         </thead>
         <tbody>
           @forelse($users as $user)
-          <tr>
-            <td>
-              <input class="checkbox customer-checkbox" type="checkbox" />
-            </td>
-            <td>
-              <div class="flex items-center gap-3">
-                <div class="avatar avatar-circle">
-                  <img class="avatar-img" src="{{ $user->avatar ? asset('storage/' . $user->avatar) : asset('images/avatar1.png') }}" alt="Avatar" />
-                </div>
+            <tr>
+              <td>
+                <input class="checkbox customer-checkbox" type="checkbox" />
+              </td>
+              <td>
+                <div class="flex items-center gap-3">
+                  <div class="avatar avatar-circle">
+                    <img class="avatar-img"
+                      src="{{ $user->avatar ? asset('storage/' . $user->avatar) : asset('images/avatar1.png') }}"
+                      alt="Avatar" />
+                  </div>
 
-                <div>
-                  <h6 class="whitespace-nowrap text-sm font-medium text-slate-700 dark:text-slate-100">
-                    {{ $user->name }}
-                  </h6>
-                  <p class="truncate text-xs text-slate-500 dark:text-slate-400">{{ $user->email }}</p>
-                </div>
-              </div>
-            </td>
-            <td>{{ $user->phone ?? 'N/A' }}</td>
-            <td>{{ $user->orders->first()?->created_at?->format('d M Y') ?? 'No orders' }}</td>
-            <td>
-              <div class="badge {{ $user->is_active ? 'badge-soft-success' : 'badge-soft-danger' }}">
-                {{ $user->is_active ? 'Active' : 'Inactive' }}
-              </div>
-            </td>
-            <td>
-              <div class="flex justify-end">
-                <div class="dropdown" data-placement="bottom-start">
-                  <div class="dropdown-toggle">
-                    <i class="w-6 text-slate-400" data-feather="more-horizontal"></i>
-                  </div>
-                  <div class="dropdown-content">
-                    <ul class="dropdown-list">
-                      <li class="dropdown-list-item">
-                        <a href="{{ route('admin.user-details', $user->id) }}" class="dropdown-link">
-                          <i class="h-5 text-slate-400" data-feather="eye"></i>
-                          <span>View</span>
-                        </a>
-                      </li>
-                      <li class="dropdown-list-item">
-                        <a href="javascript:void(0)" class="dropdown-link">
-                          <i class="h-5 text-slate-400" data-feather="trash"></i>
-                          <span>Delete</span>
-                        </a>
-                      </li>
-                      <li class="dropdown-list-item">
-                        <a href="javascript:void(0)" class="dropdown-link">
-                          <i class="h-5 text-slate-400" data-feather="minus-circle"></i>
-                          <span>{{ $user->is_active ? 'Deactivate' : 'Activate' }}</span>
-                        </a>
-                      </li>
-                    </ul>
+                  <div>
+                    <h6 class="whitespace-nowrap text-sm font-medium text-slate-700 dark:text-slate-100">
+                      {{ $user->name }}
+                    </h6>
+                    <p class="truncate text-xs text-slate-500 dark:text-slate-400">{{ $user->email }}</p>
                   </div>
                 </div>
-              </div>
-            </td>
-          </tr>
+              </td>
+              <td>{{ $user->phone ?? 'N/A' }}</td>
+              <td>
+                <div class="badge {{ $user->is_active ? 'badge-soft-success' : 'badge-soft-danger' }}">
+                  {{ $user->is_active ? 'Active' : 'Inactive' }}
+                </div>
+              </td>
+              <td>
+                <div class="flex justify-end">
+                  <div class="dropdown" data-placement="bottom-start">
+                    <div class="dropdown-toggle">
+                      <i class="w-6 text-slate-400" data-feather="more-horizontal"></i>
+                    </div>
+                    <div class="dropdown-content">
+                      <ul class="dropdown-list">
+                        <li class="dropdown-list-item">
+                          <a href="{{ route('admin.user-details', $user->id) }}" class="dropdown-link">
+                            <i class="h-5 text-slate-400" data-feather="eye"></i>
+                            <span>View</span>
+                          </a>
+                        </li>
+                        <li class="dropdown-list-item">
+                          <a href="javascript:void(0)" class="dropdown-link">
+                            <i class="h-5 text-slate-400" data-feather="trash"></i>
+                            <span>Delete</span>
+                          </a>
+                        </li>
+                        <li class="dropdown-list-item">
+                          <a href="javascript:void(0)" class="dropdown-link">
+                            <i class="h-5 text-slate-400" data-feather="minus-circle"></i>
+                            <span>{{ $user->is_active ? 'Deactivate' : 'Activate' }}</span>
+                          </a>
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+              </td>
+            </tr>
           @empty
-          <tr>
-            <td colspan="6" class="text-center py-8">
-              <p class="text-slate-500 dark:text-slate-400">No users found</p>
-            </td>
-          </tr>
+            <tr>
+              <td colspan="6" class="text-center py-8">
+                <p class="text-slate-500 dark:text-slate-400">No users found</p>
+              </td>
+            </tr>
           @endforelse
         </tbody>
       </table>

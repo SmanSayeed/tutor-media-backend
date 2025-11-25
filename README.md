@@ -1,48 +1,46 @@
-# Tutor Media Backend
+# Tutor Solution BD - Backend
 
-A comprehensive e-commerce platform built with Laravel 12 for selling fashion shoes online. Optimized for shared hosting environments with full-featured product management, order processing, and customer management.
+A comprehensive educational platform backend built with Laravel 12 for **Tutor Solution BD**. This system provides a robust foundation for managing tutors, students, courses, and educational content. Optimized for shared hosting environments with full-featured user management, content delivery, and administrative capabilities.
 
-## 🚀 Features
+## � Features
 
-### Product Management
+### Content Management
 
--   Categories and unlimited subcategories
--   Product variants (size, color, material)
--   Multiple product images with WebP support
--   Stock management and inventory tracking
--   Sale pricing with date ranges
--   Full-text search with Laravel Scout
--   SEO-optimized URLs and meta tags
-
-### Order Management
-
--   Complete order lifecycle tracking
--   Multiple payment methods (COD, Stripe, PayPal)
--   Dynamic shipping zones
--   Order status management
--   Return request system
--   PDF invoice generation
--   Excel export functionality
-
-### Customer Features
-
--   Customer registration and profiles
--   Wishlist system
--   Product reviews and ratings
--   Order history and tracking
--   Return request management
--   Mobile OTP verification
-
-### Business Features
-
--   Marketing campaigns
+-   Dynamic banner management
+-   Site settings and configuration
 -   Social media integration
 -   WhatsApp chat integration
--   Analytics tracking
--   GDPR cookie consent
--   Multi-language support (EN/BN)
+-   Cookie consent management (GDPR compliant)
+-   SEO-optimized URLs and meta tags
 
-## 📋 Requirements
+### User Management
+
+-   Role-based access control (Admin, User)
+-   User registration and authentication
+-   Profile management
+-   Mobile OTP verification
+-   Secure password hashing
+-   Session management
+
+### Educational Features
+
+-   Course and content delivery
+-   Tutor and student management
+-   Custom notifications system
+-   Coupon and discount management
+-   Multi-language support (EN/BN)
+-   Analytics tracking
+
+### Administrative Features
+
+-   Comprehensive admin dashboard
+-   User activity monitoring
+-   Site-wide settings management
+-   Banner and promotional content control
+-   Social media links management
+-   GDPR cookie consent
+
+## �📋 Requirements
 
 -   PHP 8.2 or higher
 -   MySQL 5.7 or higher
@@ -74,7 +72,7 @@ npm install
 4. **Environment setup**
 
 ```bash
-cp env-example.txt .env
+cp .env.example .env
 php artisan key:generate
 ```
 
@@ -124,6 +122,8 @@ Visit: `http://localhost:8000`
 -   `maatwebsite/excel` - Excel import/export
 -   `twilio/sdk` - SMS/OTP functionality
 -   `spatie/laravel-cookie-consent` - GDPR compliance
+-   `spatie/laravel-login-link` - Magic link authentication
+-   `spatie/laravel-settings` - Application settings management
 
 ### Frontend
 
@@ -133,12 +133,12 @@ Visit: `http://localhost:8000`
 
 ## 🗄️ Database Structure
 
-The project includes 23 tables:
+The project includes the following core tables:
 
--   Core: categories, subcategories, brands, products
--   E-commerce: orders, order_items, customers, wishlists
--   Business: campaigns, shipping_zones, return_requests, reviews
--   System: settings, social_links, notifications, analytics_events
+-   **Users & Authentication**: users, sessions
+-   **Content Management**: banners, site_settings, social_links
+-   **Educational**: coupons, custom_notifications
+-   **System**: settings, cache, cookie_consent, whatsapp_chats
 
 ## 🧪 Testing
 
@@ -151,14 +151,13 @@ php artisan test
 Run specific test:
 
 ```bash
-php artisan test --filter CategoryTest
+php artisan test --filter UserTest
 ```
 
 ## 📚 Documentation
 
--   `PROJECT-SUMMARY.md` - Complete project summary
--   `development-plan.txt` - 100+ step development roadmap
--   `env-example.txt` - Environment configuration template
+-   `README.md` - This file
+-   `.env.example` - Environment configuration template
 
 ## 🔧 Development Commands
 
@@ -191,15 +190,16 @@ tutor-media-backend/
 ├── app/
 │   ├── Http/Controllers/
 │   │   ├── Admin/          # Admin panel controllers
-│   │   ├── Frontend/       # Frontend controllers
 │   │   └── Auth/           # Authentication controllers
-│   └── Models/             # Eloquent models (19 models)
+│   └── Models/             # Eloquent models
 ├── database/
-│   └── migrations/         # Database migrations (23 tables)
+│   └── migrations/         # Database migrations
 ├── resources/
 │   ├── css/               # Tailwind CSS
 │   ├── js/                # JavaScript files
 │   └── views/             # Blade templates
+│       ├── admin/         # Admin panel views
+│       └── layouts/       # Layout templates
 ├── tests/
 │   ├── Feature/           # Feature tests
 │   └── Unit/              # Unit tests
@@ -214,6 +214,7 @@ tutor-media-backend/
 -   Rate limiting ready
 -   GDPR compliance ready
 -   Secure password hashing
+-   Session security
 
 ## ⚡ Performance
 
@@ -247,52 +248,14 @@ This project is open-sourced software licensed under the [MIT license](https://o
 
 ## 👥 Support
 
-For support, email support@example.com or open an issue in the repository.
-
-## 🎯 Roadmap
-
-See `development-plan.txt` for the complete 100+ step development roadmap.
-
-### Phase 1: Core Infrastructure ✅
-
--   Database design and migrations
--   Model creation with relationships
--   Controller generation
--   Testing framework setup
-
-### Phase 2: Authentication & Authorization (In Progress)
-
--   User authentication
--   Role-based permissions
--   OTP verification
--   Password reset
-
-### Phase 3: Admin Panel (Pending)
-
--   Dashboard
--   CRUD operations
--   Reporting features
-
-### Phase 4: Frontend Development (Pending)
-
--   Responsive layouts
--   Product browsing
--   Shopping cart
--   Checkout flow
-
-### Phase 5: Advanced Features (Pending)
-
--   Multi-language implementation
--   Payment gateway integration
--   Real-time notifications
--   Analytics integration
+For support, contact the development team or open an issue in the repository.
 
 ## 📊 Status
 
 **Current Version:** 1.0.0  
-**Status:** Phase 1 Complete - Ready for Phase 2  
-**Last Updated:** October 14, 2025
+**Status:** Active Development  
+**Last Updated:** November 25, 2025
 
 ---
 
-Built with ❤️ using Laravel 12
+Built with ❤️ for **Tutor Solution BD** using Laravel 12
