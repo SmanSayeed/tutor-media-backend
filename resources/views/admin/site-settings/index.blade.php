@@ -1482,13 +1482,11 @@
         const files = e.dataTransfer.files;
         if (files.length > 0) {
           input.files = files;
-          const previewId = input.id === 'logo' ? 'logo-preview' : 
-                           input.id === 'favicon' ? 'favicon-preview' : 'og-image-preview';
+          const previewId = input.id === 'logo' ? 'logo-preview' : 'favicon-preview';
           previewImage(input, previewId, area.id);
         }
       });
     });
-    
     // Character Counter for Description
     const descriptionTextarea = document.getElementById('website_description');
     const descriptionCount = document.getElementById('description-count');

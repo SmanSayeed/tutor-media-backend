@@ -3031,3 +3031,23 @@ body {
         margin: 16px !important;
     }
 }
+
+.tab-button {
+    @apply flex items-center gap-2 px-4 py-2 rounded-sm transition-colors duration-150 ease-in-out border border-primary;
+    .tab-button-content {
+        @apply flex items-center gap-2;
+    }
+}
+
+.tab-button.active {
+    @apply bg-primary text-white;
+}
+
+input,
+textarea,
+select {
+    @apply rounded-sm border border-neutral-500 px-4 py-2 w-full;
+}
+label {
+    @apply mb-2 flex items-center gap-2 text-sm font-medium text-neutral-900;
+}
