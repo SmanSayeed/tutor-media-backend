@@ -2,15 +2,17 @@
 
 namespace App\Models;
 
+use App\Enums\UserStatusEnum;
 use App\Notifications\ResetPassword;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Notifications\Notifiable;
+use Laravel\Sanctum\HasApiTokens;
 
 class User extends Authenticatable
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
-    use HasFactory, Notifiable;
+    use HasApiTokens, HasFactory, Notifiable;
 
     /**
      * The attributes that are mass assignable.
@@ -21,16 +23,12 @@ class User extends Authenticatable
         'name',
         'email',
         'email_verified_at',
-        'password',
         'phone',
+        'phone_verified_at',
+        'password',
         'avatar',
         'role',
-        'is_active',
-        'is_guest',
-        'timezone',
-        'last_login_ip',
-        'login_attempts',
-        'locked_until',
+        'status'
     ];
 
     /**
@@ -53,9 +51,7 @@ class User extends Authenticatable
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
-            'is_active' => 'boolean',
-            'login_attempts' => 'integer',
-            'locked_until' => 'datetime',
+            'status' => UserStatusEnum::class,
         ];
     }
 
@@ -65,7 +61,7 @@ class User extends Authenticatable
      */
     public function isActive(): bool
     {
-        return $this->is_active && (!$this->locked_until || $this->locked_until->isPast());
+        return $this->status === UserStatusEnum::ACTIVE;
     }
 
     /**
@@ -81,7 +77,7 @@ class User extends Authenticatable
      */
     public function isLocked(): bool
     {
-        return $this->locked_until && $this->locked_until->isFuture();
+        return $this->status === UserStatusEnum::BANNED;
     }
 
     /**

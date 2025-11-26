@@ -2,41 +2,39 @@
 
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\ProfileController;
-use App\Http\Controllers\Auth\LoginController;
-use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\UserController as AdminUserController;
+use App\Http\Controllers\Auth\LoginController;
+use App\Http\Middleware\AdminAuthMiddleware;
+use App\Http\Middleware\AdminGuestMiddleware;
+use Illuminate\Support\Facades\Route;
 
+// Route::get('/', function () {
+//     return redirect()->route('dashboard');
+// });
 // Admin routes
-Route::get('/login', [LoginController::class, 'login'])->name('login');
-Route::post('/login', [LoginController::class, 'authenticate'])->name('authenticate');
-Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
-Route::get('register', [LoginController::class, 'register'])->name('register');
-Route::post('register', [LoginController::class, 'register'])->name('register.store');
-Route::get('forgot-password', [LoginController::class, 'forgot_password'])->name('forgot-password');
-Route::post('forgot-password', [LoginController::class, 'forgot_password'])->name('forgot-password.store');
-Route::get('check-email', [LoginController::class, 'check_email'])->name('check-email');
-Route::get('reset-password', [LoginController::class, 'reset_password'])->name('reset-password');
-Route::post('reset-password', [LoginController::class, 'reset_password'])->name('reset-password.store');
-
-// Admin Authentication Routes (legacy support - redirect to main login)
-Route::get('/admin/login', function () {
-    return redirect('/login');
+Route::middleware([AdminGuestMiddleware::class])->group(function () {
+    Route::get('/login', [LoginController::class, 'login'])->name('login');
+    Route::post('/login', [LoginController::class, 'authenticate'])->name('authenticate');
+    Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
+    Route::get('register', [LoginController::class, 'register'])->name('register');
+    Route::post('register', [LoginController::class, 'register'])->name('register.store');
+    Route::get('forgot-password', [LoginController::class, 'forgot_password'])->name('forgot-password');
+    Route::post('forgot-password', [LoginController::class, 'forgot_password'])->name('forgot-password.store');
+    Route::get('check-email', [LoginController::class, 'check_email'])->name('check-email');
+    Route::get('reset-password', [LoginController::class, 'reset_password'])->name('reset-password');
+    Route::post('reset-password', [LoginController::class, 'reset_password'])->name('reset-password.store');
 });
 
-Route::get('/', function () {
-    return redirect('/admin');
-})->name('admin.home');
-
 // Protected Admin Routes
-Route::prefix('admin')->name('admin.')->middleware('admin')->group(function () {
-    Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
 
+Route::middleware([AdminAuthMiddleware::class])->group(function () {
     // Admin Profile Routes
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
     Route::get('/profile', [ProfileController::class, 'index'])->name('profile');
     Route::put('/profile', [ProfileController::class, 'updateProfile'])->name('profile.update');
     Route::put('/password', [ProfileController::class, 'updatePassword'])->name('password.update');
     Route::get('/users', [AdminUserController::class, 'index'])->name('users');
-    Route::get('/user/{id}', [AdminUserController::class, 'show'])->name('user-details');  
+    Route::get('/user/{id}', [AdminUserController::class, 'show'])->name('user-details');
 
     // Banners
     Route::resource('banners', \App\Http\Controllers\Admin\BannerController::class);
@@ -46,10 +44,6 @@ Route::prefix('admin')->name('admin.')->middleware('admin')->group(function () {
 
     // Coupons
     Route::resource('coupons', \App\Http\Controllers\Admin\CouponController::class);
-
-    // Advance Payment Settings
-    Route::get('advance-payment-settings', [\App\Http\Controllers\AdvancePaymentController::class, 'index'])->name('advance-payment.index');
-    Route::post('advance-payment-settings/update', [\App\Http\Controllers\AdvancePaymentController::class, 'update'])->name('advance-payment.update');
 
     // Site Settings
     Route::get('/site-settings', [\App\Http\Controllers\Admin\SiteSettingController::class, 'index'])->name('site-settings.index');

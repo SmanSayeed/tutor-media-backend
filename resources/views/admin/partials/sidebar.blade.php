@@ -1,7 +1,7 @@
 <!-- Sidebar Starts -->
 <aside class="sidebar">
   <!-- Sidebar Header Starts -->
-  <a href="{{ route('admin.home') }}">
+  <a href="{{ route('admin.dashboard') }}">
     <div class="sidebar-header">
       @php
         $logoUrl = \App\Helpers\SiteSettingsHelper::logoUrl();
