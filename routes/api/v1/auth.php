@@ -12,11 +12,11 @@ Route::group(['prefix' => 'auth', 'as' => 'auth.'], function () {
         Route::post('send-otp', [AuthController::class, 'sendOtp']);
         Route::post('verify-email-or-phone', [AuthController::class, 'verifyEmailOrPhone']);
         Route::post('forgot-password', [AuthController::class, 'forgotPassword']);
-
     });
 
     Route::group(['middleware' => 'auth:client'], function () {
         Route::post('logout', [AuthController::class, 'logout']);
         Route::get('me', [AuthController::class, 'me']);
+        Route::post('update-profile', [AuthController::class, 'updateProfile']);
     });
 });

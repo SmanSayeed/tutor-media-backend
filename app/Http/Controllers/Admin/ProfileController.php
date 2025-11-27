@@ -5,18 +5,18 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Validation\Rules;
 use Illuminate\Validation\Rule;
-use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\Rules;
 
 class ProfileController extends Controller
 {
     /**
      * Show the admin profile page.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $user = Auth::user();
+        $user = auth()->guard('admin')->user();
+
         return view('admin.profile.index', compact('user'));
     }
 
@@ -25,7 +25,7 @@ class ProfileController extends Controller
      */
     public function updateProfile(Request $request)
     {
-        $user = $request->user();
+        $user = auth()->guard('admin')->user();
 
         $validated = $request->validate([
             'name' => ['required', 'string', 'max:255'],
@@ -48,7 +48,9 @@ class ProfileController extends Controller
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
         ]);
 
-        $request->user()->update([
+        $user = auth()->guard('admin')->user();
+
+        $user->update([
             'password' => Hash::make($request->password),
         ]);
 

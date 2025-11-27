@@ -8,9 +8,11 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\StoreUserRequest;
 use App\Http\Requests\Api\UpdateUserRequest;
 use App\Models\User;
+use App\Traits\EmailAndPhoneOTPVerification;
 use App\Traits\Formatter;
 use App\Traits\MediaUploader;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules\Password;
@@ -19,7 +21,7 @@ use Laravel\Socialite\Facades\Socialite;
 
 class AuthController extends Controller
 {
-    use Formatter, MediaUploader;
+    use EmailAndPhoneOTPVerification, Formatter, MediaUploader;
 
     public function register(StoreUserRequest $request)
     {
@@ -173,6 +175,12 @@ class AuthController extends Controller
 
     public function sendOtp(Request $request)
     {
+        $user = User::where('email', $request->email)->orWhere('phone', $request->phone)->first();
+
+        if ($user?->isAdmin()) {
+            return $this->withError(__('Admin cannot send OTP'));
+        }
+
         $request->validate([
             'type' => 'required|in:email,phone',
             'email' => 'required_if:type,email|email|exists:users,email',
@@ -192,6 +200,10 @@ class AuthController extends Controller
             'phone' => 'required_if:type,phone|exists:users,phone',
             'otp' => 'required|numeric',
         ]);
+
+        if (! $this->verifyOtp($request->type, $request->{$request->type}, $request->otp)) {
+            return $this->withError(__('Invalid OTP'));
+        }
 
         $message = __('Phone verified successfully');
 
@@ -238,8 +250,61 @@ class AuthController extends Controller
         $value = $request->{$type};
         $otp = $request->otp;
         $password = $request->password;
+        $cacheKey = $this->generateKey("{$type}-verified", $value);
+
+        if (! $password && ! Cache::has($cacheKey) && ! $otp) {
+            throw ValidationException::withMessages(['otp' => __('otp is required')]);
+        }
+
+        // Step 1: OTP Verification
+        if ($otp) {
+            if (! $this->verifyOtp($type, $value, $otp)) {
+                return $this->withError(__('Invalid OTP'));
+            }
+
+            Cache::rememberForever($cacheKey, fn () => json_encode([
+                'type' => $type,
+                'value' => $value,
+            ]));
+
+            return $this->withSuccess(__('OTP verified successfully'));
+        }
+
+        // Step 2: Password Change
+        if (! Cache::has($cacheKey)) {
+            return $this->withError(__('Please verify your OTP first'));
+        }
+
+        if (! $password) {
+            throw ValidationException::withMessages(['password' => __('Password is required!')]);
+        }
+
+        $cacheValue = json_decode(Cache::get($cacheKey));
+        $user = User::where($cacheValue->type, $cacheValue->value)->first();
+
+        if (! $user) {
+            return $this->withError(__('User not found'));
+        }
+
+        $user->update([
+            'password' => Hash::make($password),
+        ]);
+
+        Cache::forget($cacheKey);
 
         return $this->withSuccess(__('Password changed successfully'));
+    }
+
+    private function verifyOtp(string $type, string $value, string $otp): bool
+    {
+        // Allow static OTP in local environment for testing
+        if (! app()->environment('production') && $otp === '12345') {
+            return true;
+        }
+
+        return $type === 'email'
+            ? $this->verifyEmailOtp(new Request(['email' => $value, 'otp' => $otp]))
+            : $this->verifyPhoneOtp(new Request(['phone' => $value, 'otp' => $otp]));
     }
 
     private function checkUserIsBanned($user)

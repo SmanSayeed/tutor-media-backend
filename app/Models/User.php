@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Enums\UserRolesEnum;
 use App\Enums\UserStatusEnum;
 use App\Notifications\ResetPassword;
+use Carbon\Carbon;
 use Cviebrock\EloquentSluggable\Sluggable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -75,6 +76,18 @@ class User extends Authenticatable
     public function isActive(): bool
     {
         return $this->status === UserStatusEnum::ACTIVE;
+    }
+
+    public function hasVerifiedPhone(): bool
+    {
+        return $this->phone_verified_at instanceof Carbon;
+    }
+
+    public function markPhoneAsVerified(): void
+    {
+        $this->update([
+            'phone_verified_at' => now(),
+        ]);
     }
 
     /**
