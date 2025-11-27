@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Enums\UserRolesEnum;
 use App\Models\User;
 use Illuminate\Database\Seeder;
 
@@ -15,16 +16,23 @@ class UserSeeder extends Seeder
         $users = [
             [
                 'name' => 'Admin User',
+                'username' => 'admin',
                 'email' => 'admin@gmail.com',
-                'role' => 'admin',
-                'is_active' => true,
+                'role' => UserRolesEnum::ADMIN,
                 'password' => '12345678',
             ],
             [
-                'name' => 'Test User',
-                'email' => 'user@gmail.com',
-                'role' => 'customer',
-                'is_active' => true,
+                'name' => 'Guardian User',
+                'username' => 'guardian',
+                'email' => 'guardian@gmail.com',
+                'role' => UserRolesEnum::GUARDIAN,
+                'password' => '12345678',
+            ],
+            [
+                'name' => 'Tutor User',
+                'username' => 'tutor',
+                'email' => 'tutor@gmail.com',
+                'role' => UserRolesEnum::TUTOR,
                 'password' => '12345678',
             ],
 

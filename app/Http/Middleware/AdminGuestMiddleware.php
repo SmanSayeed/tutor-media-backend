@@ -15,11 +15,14 @@ class AdminGuestMiddleware
      */
     public function handle(Request $request, Closure $next): Response
     {
-        // $admin = $request->user('admin');
-        // dd($admin );
-        // if ($admin && !$request->is('admin*')) {
-        //     return redirect()->route('admin.dashboard');
-        // }
+        $user = auth()->guard('admin')->user();
+
+        $isAdmin = $user?->isAdmin();
+        $isAdminRoute = $request->is('admin*');
+
+        if ($isAdmin && $isAdminRoute) {
+            return redirect()->route('admin.dashboard');
+        }
 
         return $next($request);
     }

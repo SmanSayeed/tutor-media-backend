@@ -2,17 +2,19 @@
 
 namespace App\Models;
 
+use App\Enums\UserRolesEnum;
 use App\Enums\UserStatusEnum;
 use App\Notifications\ResetPassword;
-use Illuminate\Foundation\Auth\User as Authenticatable;
+use Cviebrock\EloquentSluggable\Sluggable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 
 class User extends Authenticatable
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
-    use HasApiTokens, HasFactory, Notifiable;
+    use HasApiTokens, HasFactory, Notifiable, Sluggable;
 
     /**
      * The attributes that are mass assignable.
@@ -28,7 +30,8 @@ class User extends Authenticatable
         'password',
         'avatar',
         'role',
-        'status'
+        'status',
+        'address',
     ];
 
     /**
@@ -50,11 +53,21 @@ class User extends Authenticatable
     {
         return [
             'email_verified_at' => 'datetime',
+            'phone_verified_at' => 'datetime',
             'password' => 'hashed',
             'status' => UserStatusEnum::class,
+            'role' => UserRolesEnum::class,
         ];
     }
 
+    public function sluggable(): array
+    {
+        return [
+            'username' => [
+                'source' => ['name'],
+            ],
+        ];
+    }
 
     /**
      * Check if user account is active.
@@ -69,7 +82,17 @@ class User extends Authenticatable
      */
     public function isAdmin(): bool
     {
-        return $this->role === 'admin';
+        return $this->role === UserRolesEnum::ADMIN;
+    }
+
+    public function isTutor(): bool
+    {
+        return $this->role === UserRolesEnum::TUTOR;
+    }
+
+    public function isGuardian(): bool
+    {
+        return $this->role === UserRolesEnum::GUARDIAN;
     }
 
     /**

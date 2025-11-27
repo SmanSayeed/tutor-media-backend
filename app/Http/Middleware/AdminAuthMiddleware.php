@@ -15,14 +15,19 @@ class AdminAuthMiddleware
      */
     public function handle(Request $request, Closure $next): Response
     {
-        $admin = $request->user('admin');
-        // if (! $admin && !$request->is('admin/login')) {
-        //     return redirect()->route('admin.login');
-        // }
+        $user = $request->user('admin');
 
-        // if ($request->is('admin') || $request->is('admin/')) {
-        //     return redirect()->route('admin.dashboard');
-        // }
+        if (! $user && ! $request->is('admin/login')) {
+            return redirect()->route('admin.login');
+        }
+
+        if ($user && ! $user->isAdmin()) {
+            return redirect()->route('admin.login')->with('error', 'You are not authorized to access this page.');
+        }
+
+        if ($request->is('admin') || $request->is('admin/')) {
+            return redirect()->route('admin.dashboard');
+        }
 
         return $next($request);
     }

@@ -18,7 +18,11 @@ class LoginController extends Controller
 
     public function authenticate(AdminLoginRequest $request)
     {
-        dd($request->only(['email', 'password']));
+        $user = User::where('email', $request->email)->first();
+        if (! $user->isAdmin()) {
+            return redirect()->back()->with('error', 'You are not an admin.');
+        }
+
         $request->authenticate();
 
         $request->session()->regenerate();
@@ -43,10 +47,6 @@ class LoginController extends Controller
     public function forgot_password(Request $request)
     {
         if ($request->isMethod('get')) {
-            if (Auth::check()) {
-                return $this->redirectBasedOnRole(Auth::user());
-            }
-
             return view('auth.forgot-password');
         }
 
@@ -57,14 +57,8 @@ class LoginController extends Controller
         $user = User::where('email', $request->email)->first();
 
         if (! $user) {
-            return redirect()->route('check-email', ['email' => $request->email])->withErrors([
+            return redirect()->route('admin.check-email', ['email' => $request->email])->withErrors([
                 'email' => 'No account found with this email address.',
-            ]);
-        }
-
-        if (! $user->is_active) {
-            return redirect()->route('check-email', ['email' => $request->email])->withErrors([
-                'email' => 'Your account has been deactivated. Please contact support.',
             ]);
         }
 
@@ -72,21 +66,18 @@ class LoginController extends Controller
         $token = Password::createToken($user);
         $user->sendPasswordResetNotification($token);
 
-        return redirect()->route('check-email', ['email' => $request->email])->with('success', 'Password reset link has been sent to your email address.');
+        return redirect()->route('admin.check-email', ['email' => $request->email])->with('success', 'Password reset link has been sent to your email address.');
     }
 
     public function check_email(Request $request)
     {
-        if (Auth::check()) {
-            return $this->redirectBasedOnRole(Auth::user());
-        }
 
         $email = $request->query('email');
         $message = session('success');
 
         // If no email provided and no success message, redirect to forgot password
         if (! $email && ! $message) {
-            return redirect()->route('forgot-password');
+            return redirect()->route('admin.forgot-password');
         }
 
         return view('auth.check-email', compact('email', 'message'));
